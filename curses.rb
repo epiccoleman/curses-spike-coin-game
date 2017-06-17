@@ -75,6 +75,8 @@ class Board
   def row_str(row)
     @board[row].join
   end
+
+  attr_reader :score
 end
 
 class Point
@@ -100,8 +102,11 @@ begin
 
   game_board_height = window_height - 16
   game_board_width = window_width - 6
+  score_line = window_height - 10
   board = Board.new(game_board_width, game_board_height)
 
+  window.setpos(score_line, 3)
+  window.addstr("Score: #{board.score}")
   board.update_board
   for i in (0...game_board_height) do
     window.setpos(i + 3, 3)
@@ -132,6 +137,8 @@ begin
       window.setpos(i + 3, 3)
       window.addstr(board.row_str(i))
     end
+    window.setpos(score_line, 3)
+    window.addstr("Score: #{board.score}")
     window.refresh
   end
 
