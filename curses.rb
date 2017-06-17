@@ -71,16 +71,18 @@ begin
   Curses.nonl   # don't make newlines on key press
   Curses.curs_set(0)  # Invisible cursor
 
-  window = Curses::Window.new(11, 11, Curses.lines - 15, 0)
-  board = Board.new(11, 11)
+  window_height = Curses.lines
+  window_width = Curses.cols
+  window = Curses::Window.new(window_height, window_width, 0, 0)
 
-  for i in (0...11) do
-    window.setpos(i, 0)
+  game_board_height = window_height - 16
+  game_board_width = window_width - 6
+  board = Board.new(game_board_width, game_board_height)
+
+  for i in (0...game_board_height) do
+    window.setpos(i + 3, 3)
     window.addstr(board.row_str(i))
   end
-  window.refresh
-
-  window.setpos(1,0)
   window.refresh
 
   input = Curses::Key::UP
@@ -101,8 +103,8 @@ begin
     if input == 'x'
       break
     end
-    for i in (0...11) do
-      window.setpos(i, 0)
+    for i in (0...game_board_height) do
+      window.setpos(i + 3, 3)
       window.addstr(board.row_str(i))
     end
     window.refresh
