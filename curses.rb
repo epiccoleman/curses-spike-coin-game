@@ -1,14 +1,15 @@
 require 'curses'
 
 class Board
-  def initialize(side_length)
-    @side_length = side_length
-    middle = side_length / 2
-    place_player(Point.new(middle, middle))
+  def initialize(x_length, y_length)
+    @x_length = x_length
+    @y_length = y_length
+    middle = Point.new(@x_length / 2, @y_length / 2)
+    place_player(middle)
   end
 
   def clear_board
-    @board = Array.new(@side_length) { Array.new(@side_length, '.') }
+    @board = Array.new(@y_length) { Array.new(@x_length, '.') }
   end
 
   def place_player(point)
@@ -20,8 +21,8 @@ class Board
   def validate_new_pos(new_pos)
     new_pos.x >= 0 \
       and new_pos.y >= 0 \
-      and new_pos.x < @side_length \
-      and new_pos.y < @side_length
+      and new_pos.x < @x_length \
+      and new_pos.y < @y_length
   end
   def left
     new_pos = Point.new(@player_pos.x - 1, @player_pos.y)
@@ -71,7 +72,7 @@ begin
   Curses.curs_set(0)  # Invisible cursor
 
   window = Curses::Window.new(11, 11, Curses.lines - 15, 0)
-  board = Board.new(11)
+  board = Board.new(11, 11)
 
   for i in (0...11) do
     window.setpos(i, 0)
