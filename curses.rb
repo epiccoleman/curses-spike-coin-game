@@ -4,18 +4,41 @@ class Board
   def initialize(x_length, y_length)
     @x_length = x_length
     @y_length = y_length
-    middle = Point.new(@x_length / 2, @y_length / 2)
-    place_player(middle)
+    @score = 0
+
+    @player_pos = Point.new(@x_length / 2, @y_length / 2)
+
+    generate_coins
+    update_board
   end
 
   def clear_board
     @board = Array.new(@y_length) { Array.new(@x_length, '.') }
   end
 
-  def place_player(point)
+  def update_board
     clear_board
+    place_player
+    place_coins
+  end
+
+  def place_player
+    @board[@player_pos.y][@player_pos.x] = 'X'
+  end
+
+  def place_coin(point)
     @board[point.y][point.x] = '0'
-    @player_pos = point
+  end
+
+  def generate_coins
+    @coins = [ Point.new(@player_pos.x + 4, @player_pos.y),
+               Point.new(@player_pos.x, @player_pos.y - 2)  ]
+  end
+
+  def place_coins
+    for coin in @coins do
+      place_coin coin
+    end
   end
 
   def validate_new_pos(new_pos)
@@ -27,25 +50,25 @@ class Board
   def left
     new_pos = Point.new(@player_pos.x - 1, @player_pos.y)
     if (validate_new_pos(new_pos))
-      place_player(new_pos)
+      @player_pos = new_pos
     end
   end
   def right
     new_pos = Point.new(@player_pos.x + 1, @player_pos.y)
     if (validate_new_pos(new_pos))
-      place_player(new_pos)
+      @player_pos = new_pos
     end
   end
   def up
     new_pos = Point.new(@player_pos.x, @player_pos.y - 1)
     if (validate_new_pos(new_pos))
-      place_player(new_pos)
+      @player_pos = new_pos
     end
   end
   def down
     new_pos = Point.new(@player_pos.x, @player_pos.y + 1)
     if (validate_new_pos(new_pos))
-      place_player(new_pos)
+      @player_pos = new_pos
     end
   end
 
@@ -79,6 +102,7 @@ begin
   game_board_width = window_width - 6
   board = Board.new(game_board_width, game_board_height)
 
+  board.update_board
   for i in (0...game_board_height) do
     window.setpos(i + 3, 3)
     window.addstr(board.row_str(i))
@@ -103,6 +127,7 @@ begin
     if input == 'x'
       break
     end
+    board.update_board
     for i in (0...game_board_height) do
       window.setpos(i + 3, 3)
       window.addstr(board.row_str(i))
