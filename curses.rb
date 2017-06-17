@@ -5,6 +5,7 @@ class Board
     @x_length = x_length
     @y_length = y_length
     @score = 0
+    @coins = []
 
     @player_pos = Point.new(@x_length / 2, @y_length / 2)
 
@@ -34,8 +35,13 @@ class Board
   end
 
   def generate_coins
-    @coins = [ Point.new(@player_pos.x + 4, @player_pos.y),
-               Point.new(@player_pos.x, @player_pos.y - 2)  ]
+    for x in (0...@x_length) do
+      for y in (0...@y_length) do
+        if( rand > 0.95 )
+          @coins.push Point.new(x, y)
+        end
+      end
+    end
   end
 
   def place_coins
