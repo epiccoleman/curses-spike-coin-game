@@ -19,7 +19,10 @@ class Board
   def update_board
     clear_board
     place_player
+
+    if player_on_coin? then collect_coin end
     place_coins
+
   end
 
   def place_player
@@ -39,6 +42,15 @@ class Board
     for coin in @coins do
       place_coin coin
     end
+  end
+
+  def player_on_coin?
+    @coins.any? { |coin| coin == @player_pos }
+  end
+
+  def collect_coin
+    @coins.select! { |coin| coin != @player_pos }
+    @score += 1
   end
 
   def validate_new_pos(new_pos)
@@ -83,6 +95,12 @@ class Point
   def initialize(x, y)
     @x = x
     @y = y
+  end
+
+  def ==(other)
+    other.class == self.class \
+      && other.x == self.x \
+      && other.y == self.y
   end
 
   attr_accessor :x
