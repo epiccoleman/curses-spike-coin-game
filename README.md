@@ -7,3 +7,5 @@ This repo is for messing around with the Ruby bindings for Curses.
 So, this sort of evolved into a little game. It works fine. Not exactly like, fun, but it's a good proof of concept. 
 
 It should have some tests and be, you know, organized, but it kinda got away from me as I was spiking out how the Curses bindings worked. This is fun, more to come.
+
+To play game, clone this repo, then run `bundle install && bundle exec ruby curses.rb`.
